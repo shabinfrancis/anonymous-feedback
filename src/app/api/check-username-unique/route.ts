@@ -38,7 +38,7 @@ export async function GET(request: Request) {
         console.log(`Existing verified user: ${existingVerifiedUser}`);
         // const existingVerifiedUser = await UserModel.findOne({username: queryParam.username, isVerified: true})
 
-        if (existingVerifiedUser) { //ISSUE IN THIS LOOP
+        if (existingVerifiedUser) { //ISSUE IN THIS *LOOP
             return Response.json({
                 success: false,
                 message: 'Username is already taken'
