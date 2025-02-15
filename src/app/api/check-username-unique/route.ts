@@ -13,15 +13,15 @@ export async function GET(request: Request) {
     console.log("Connected to database");
     try {
         const { searchParams } = new URL(request.url)
-        console.log(searchParams);
+        // console.log(searchParams);
         const queryParam = {
             username: searchParams.get('username')
         }
-        console.log("Query parameters:", queryParam);
+        // console.log("Query parameters:", queryParam);
 
         //validate with zod
         const res = UsernameQuerySchema.safeParse(queryParam)
-        console.log("Validation result: ", res)
+        // console.log("Validation result: ", res)
         if (!res.success) {
             const usernameErrors = res.error.format().username?._errors || [];
             return Response.json({
@@ -32,10 +32,10 @@ export async function GET(request: Request) {
         }
 
         const { username } = res.data;
-        console.log(`Checking for existing verified user with username: ${username}`);
+        // console.log(`Checking for existing verified user with username: ${username}`);
 
         const existingVerifiedUser = await UserModel.findOne({ username, isVerified: true });
-        console.log(`Existing verified user: ${existingVerifiedUser}`);
+        // console.log(`Existing verified user: ${existingVerifiedUser}`);
         // const existingVerifiedUser = await UserModel.findOne({username: queryParam.username, isVerified: true})
 
         if (existingVerifiedUser) { //ISSUE IN THIS *LOOP
@@ -45,18 +45,12 @@ export async function GET(request: Request) {
             }, { status: 400 })
         }
 
-        // if (existingVerifiedUser) { // ISSUE IN THIS LOOP
-        //     return new NextResponse(JSON.stringify({
-        //         success: false,
-        //         message: 'Username is already taken'
-        //     }), { status: 400, headers: { 'Content-Type': 'application/json' } });
-        // }
         return Response.json({
             success: true,
             message: 'Username is unique'
         }, { status: 200 })
     } catch (e) {
-        console.error("Error checking username: ", e)
+        // console.error("Error checking username: ", e)
         return Response.json(
             {
                 success: false,
